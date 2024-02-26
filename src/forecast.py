@@ -9,8 +9,7 @@ def summarize_forecast(weather_data):
     # Group entries by day
     for row in weather_data:
         entry_time = datetime.fromisoformat(row["date_time"].replace('Z', '+00:00'))
-        key = entry_time.date()
-        grp_day[key].append(row)
+        grp_day[entry_time.date()].append(row)
 
     # Process each day
     for day, entries in grp_day.items():
