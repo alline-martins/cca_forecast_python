@@ -13,12 +13,10 @@ def summarize_forecast(weather_data):
         morning_temperature, morning_rain, afternoon_temperature, afternoon_rain, all_temperature = split_entries_into_groups(entries)
 
         summary = {
-            # if no morning data, report insufficient data
             "morning_average_temperature": "Insufficient forecast data" if not morning_temperature else round(
                 sum(morning_temperature) / len(morning_temperature)),
             "morning_chance_of_rain": "Insufficient forecast data" if not morning_rain else round(
                 sum(morning_rain) / len(morning_rain), 2),
-            # if no afternoon data, report insufficient data
             "afternoon_average_temperature": "Insufficient forecast data" if not afternoon_temperature else round(
                 sum(afternoon_temperature) / len(afternoon_temperature)),
             "afternoon_chance_of_rain": "Insufficient forecast data" if not afternoon_rain else round(
