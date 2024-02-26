@@ -13,9 +13,9 @@ def summarize_forecast(weather_data):
         morning_temperature, morning_rain, afternoon_temperature, afternoon_rain, all_temperature = split_entries_into_groups(entries)
 
         summary = {
-            "morning_average_temperature": "Insufficient forecast data" if not morning_temperature else calculate_mean(morning_temperature),
+            "morning_average_temperature": creat_message(morning_temperature),
             "morning_chance_of_rain": "Insufficient forecast data" if not morning_rain else calculate_mean(morning_rain, 2),
-            "afternoon_average_temperature": "Insufficient forecast data" if not afternoon_temperature else calculate_mean(afternoon_temperature),
+            "afternoon_average_temperature": creat_message(afternoon_temperature),
             "afternoon_chance_of_rain": "Insufficient forecast data" if not afternoon_rain else calculate_mean(afternoon_rain, 2),
             "high_temperature": max(all_temperature),
             "low_temperature": min(all_temperature)
@@ -27,6 +27,9 @@ def summarize_forecast(weather_data):
         summaries[day_name] = summary
 
     return summaries
+
+def creat_message(weather_list):
+    return "Insufficient forecast data" if not weather_list else calculate_mean(weather_list)
 
 def calculate_mean(a_list, decimals = 0):
     return round(
