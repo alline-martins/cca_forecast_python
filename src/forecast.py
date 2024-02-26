@@ -3,29 +3,29 @@ from collections import defaultdict
 
 
 def summarize_forecast(weather_data):
-    grp_day = defaultdict(list)
+    group_day = defaultdict(list)
     summaries = {}
 
     # Group entries by day
     for row in weather_data:
         entry_time = datetime.fromisoformat(row["date_time"].replace('Z', '+00:00'))
-        grp_day[entry_time.date()].append(row)
+        group_day[entry_time.date()].append(row)
 
     # Process each day
-    for day, entries in grp_day.items():
+    for day, entries in group_day.items():
         morning_t, morning_r, afternoon_t, afternoon_r = [], [], [], []
         all_t = [entry["average_temperature"] for entry in entries]
 
-        for row in entries:
-            entry_time = datetime.fromisoformat(row["date_time"].replace('Z', '+00:00'))
+        for entry in entries:
+            entry_time = datetime.fromisoformat(entry["date_time"].replace('Z', '+00:00'))
             # collect morning period entries
             if 6 <= entry_time.hour < 12:
-                morning_t.append(row["average_temperature"])
-                morning_r.append(row["probability_of_rain"])
+                morning_t.append(entry["average_temperature"])
+                morning_r.append(entry["probability_of_rain"])
             # collection afternoon period entries
             elif 12 <= entry_time.hour < 18:
-                afternoon_t.append(row["average_temperature"])
-                afternoon_r.append(row["probability_of_rain"])
+                afternoon_t.append(entry["average_temperature"])
+                afternoon_r.append(entry["probability_of_rain"])
 
         summary = {
             # if no morning data, report insufficient data
