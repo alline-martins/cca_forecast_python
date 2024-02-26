@@ -28,9 +28,9 @@ def summarize_forecast(weather_data):
 
     return summaries
 
-def calculate_mean(morning_temperature, decimals = 0):
+def calculate_mean(a_list, decimals = 0):
     return round(
-                sum(morning_temperature) / len(morning_temperature), decimals)
+                sum(a_list) / len(a_list), decimals)
 
 def split_entries_into_groups(entries):
     morning_temperature, morning_rain, afternoon_temperature, afternoon_rain = [], [], [], []
