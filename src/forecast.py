@@ -3,18 +3,15 @@ from collections import defaultdict
 
 
 def summarize_forecast(weather_data):
-    group_day = defaultdict(list)
     summaries = {}
 
     # Group entries by day
-    for row in weather_data:
-        entry_time = datetime.fromisoformat(row["date_time"].replace('Z', '+00:00'))
-        group_day[entry_time.date()].append(row)
+    group_day = group_daily_entries(weather_data)
 
     # Process each day
     for day, entries in group_day.items():
         morning_temperature, morning_rain, afternoon_temperature, afternoon_rain = [], [], [], []
-        all_t = [entry["average_temperature"] for entry in entries]
+        all_temperature = [entry["average_temperature"] for entry in entries]
 
         for entry in entries:
             entry_time = datetime.fromisoformat(entry["date_time"].replace('Z', '+00:00'))
@@ -38,8 +35,8 @@ def summarize_forecast(weather_data):
                 sum(afternoon_temperature) / len(afternoon_temperature)),
             "afternoon_chance_of_rain": "Insufficient forecast data" if not afternoon_rain else round(
                 sum(afternoon_rain) / len(afternoon_rain), 2),
-            "high_temperature": max(all_t),
-            "low_temperature": min(all_t)
+            "high_temperature": max(all_temperature),
+            "low_temperature": min(all_temperature)
         }
 
         # format reader-friendly date
@@ -49,3 +46,11 @@ def summarize_forecast(weather_data):
 
     return summaries
 
+def group_daily_entries(weather_data):
+    group_day = defaultdict(list)
+
+    for row in weather_data:
+        entry_time = datetime.fromisoformat(row["date_time"].replace('Z', '+00:00'))
+        group_day[entry_time.date()].append(row)
+
+    return group_day
