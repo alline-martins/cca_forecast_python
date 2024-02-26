@@ -10,19 +10,7 @@ def summarize_forecast(weather_data):
 
     # Process each day
     for day, entries in group_day.items():
-        morning_temperature, morning_rain, afternoon_temperature, afternoon_rain = [], [], [], []
-        all_temperature = [entry["average_temperature"] for entry in entries]
-
-        for entry in entries:
-            entry_time = datetime.fromisoformat(entry["date_time"].replace('Z', '+00:00'))
-            # collect morning period entries
-            if 6 <= entry_time.hour < 12:
-                morning_temperature.append(entry["average_temperature"])
-                morning_rain.append(entry["probability_of_rain"])
-            # collection afternoon period entries
-            elif 12 <= entry_time.hour < 18:
-                afternoon_temperature.append(entry["average_temperature"])
-                afternoon_rain.append(entry["probability_of_rain"])
+        morning_temperature, morning_rain, afternoon_temperature, afternoon_rain, all_temperature = split_entries_into_groups(entries)
 
         summary = {
             # if no morning data, report insufficient data
@@ -45,6 +33,22 @@ def summarize_forecast(weather_data):
         summaries[day_name] = summary
 
     return summaries
+
+def split_entries_into_groups(entries):
+    morning_temperature, morning_rain, afternoon_temperature, afternoon_rain = [], [], [], []
+    all_temperature = [entry["average_temperature"] for entry in entries]
+
+    for entry in entries:
+        entry_time = datetime.fromisoformat(entry["date_time"].replace('Z', '+00:00'))
+            # collect morning period entries
+        if 6 <= entry_time.hour < 12:
+            morning_temperature.append(entry["average_temperature"])
+            morning_rain.append(entry["probability_of_rain"])
+            # collection afternoon period entries
+        elif 12 <= entry_time.hour < 18:
+            afternoon_temperature.append(entry["average_temperature"])
+            afternoon_rain.append(entry["probability_of_rain"])
+    return morning_temperature,morning_rain,afternoon_temperature,afternoon_rain,all_temperature
 
 def group_daily_entries(weather_data):
     group_day = defaultdict(list)
